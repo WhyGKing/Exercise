@@ -1,3 +1,5 @@
 ### Exercise: 2021년4월 수업내용에 대한 연습코드
 
-WebCrawl_kospi.py 를 jupyter notebook에서 실행하면 작동이 되는데, Pycharm이나 visual studio에서 실행하면 오류가 발생함.
+1. 코스피지수와 국고채금리자료를 가져와서, 엑셀로 저장하고, 엑셀에서 데이타를 불러와 상관관계 파악
+
+2. polymer resin의 supplier목록정보를 불러온다.
