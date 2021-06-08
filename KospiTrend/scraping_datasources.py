@@ -12,6 +12,11 @@ import matplotlib.pylab as plt
 table_k = BeautifulSoup(open('./htmlsource/kospiIndex_1997-2021.html','r',encoding='utf-8').read()).get_text()
 kospiIndex = table_k.split('\n')[2:294]
 
+
+
+
+
+
 # http://www.index.go.kr/potal/stts/idxMain/selectPoSttsIdxSearch.do?idx_cd=1073
 # 테이블에서 5년물 국고채 금리 스크래핑 (292개)
 table_b5 = BeautifulSoup(open('./htmlsource/bondRate(5y).html',encoding='utf-8').read()).get_text()
