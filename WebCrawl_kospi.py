@@ -1,4 +1,3 @@
-
 ####< 통계청 홈페이지에서 1976년부터 2020년까지의 Kospi지수를 Dataframe을 생성하기 위한 코드입니다. >####
 
 import selenium

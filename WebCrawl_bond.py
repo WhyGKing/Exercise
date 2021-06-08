@@ -48,7 +48,9 @@ tbldata = {
 }
 df = DataFrame(tbldata)
 df_bond_rate = df.set_index("Year-Month")
-print(df_bond_rate)
+# print(df_bond_rate)
+
+df.to_csv('kospiVSbond.csv', encoding='cp949')
 
 
 
