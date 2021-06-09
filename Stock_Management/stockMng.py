@@ -11,31 +11,28 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
-### 엑셀 불러오기
-df = pd.read_excel(io='./stocks_mirae.xls', sheet_name='stock')
-code = df['종목번호']
-name = df['종목명']
+# name = ['포스코케미칼', '현대차', '삼성전자', '한화솔루션', '현대모비스', '한화에어로스페이스', '한국카본', 'NAVER', 'LG생활건강', 'LG화학', '엠게임', '인선이엔티', '현대로템', '셀트리온헬스케어', '클래시스']
+# code = ['003670', '005380', '005930', '009830', '012330', '012450', '017960', '035420', '051900', '051910', '058630', '060150', '064350', '091990', '214150']
 
-### 종목코드 리스트 작성
+### 엑셀에서 종목코드 불러오기
+xl = pd.read_excel(io='./stocks_mirae.xls', sheet_name='stock')
+code = list(xl['종목번호'])
+name = list(xl['종목명'])
+# print(name)
+
 code_li = []
-for i in code:
-    if len(i) == 7:
-        slice = i[1:]
-        code_li.append(slice)
-    else:
-        pass
-# print(code_li)
-
-### 종목명 리스트 작성
 name_li = []
-for i,j in zip(name,code):
-    if len(j) == 7:
-        name_li.append(i)
-# print(name_li)
 
+for i,j in zip(code,name):
+    slice = i[1:]
+    if len(slice) == 6:
+        code_li.append(slice)
+        name_li.append(j)
+print(code_li)
+print(name_li)
 
 ### url 불러오기
-path = 'C:/Github/tutorial/stockMng/chromedriver.exe'
+path = './chromedriver.exe'
 drive = webdriver.Chrome(path)
 url = 'https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/stock/BIP_CNTS02006V.xml&menuNo=44'
 drive.get(url)
@@ -69,20 +66,17 @@ debt_ratio2017 = []
 per_2020 = []
 per_2019 = []
 per_2018 = []
-per_2017 = []
 pbr_2020 = []
 pbr_2019 = []
 pbr_2018 = []
-pbr_2017 = []
 
 
-### 종목별 주식/재무정보 추출
 for i in code_li:
     drive.refresh()
-    time.sleep(3)
+    time.sleep(5)
     # 검색창 팝업
     drive.find_element_by_id('sn_group4').click()
-    time.sleep(3)
+    time.sleep(5)
 
     # 팝업창에서 종목선택/입력
     drive.switch_to_frame('iframe1')
@@ -96,15 +90,12 @@ for i in code_li:
     drive.find_element_by_id('group94').click()
     time.sleep(5)
 
-
-
     # 시가총액
     macap = drive.find_element_by_css_selector('#MARTP_TOTAMT').text
     market_cap.append(macap)
     # 총주식수
     stockno = drive.find_element_by_css_selector('#ISSU_SCHD_STKQTY').text
     No_stocks.append(stockno)
-
     # 현재가
     currprice = drive.find_element_by_css_selector('#LDAY_CPRI').text
     curr_price.append(currprice)
@@ -145,34 +136,31 @@ for i in code_li:
     cap2017 = drive.find_element_by_css_selector('#grid5_cell_7_1 > nobr').text
     capital2017.append(cap2017)
     # 부채비율
-    debtr2020 = drive.find_element_by_css_selector('#grid5_cell_7_4 > nobr').text
+    debtr2020 = drive.find_element_by_css_selector('#grid5_cell_11_4 > nobr').text
     debt_ratio2020.append(debtr2020)
-    debtr2019 = drive.find_element_by_css_selector('#grid5_cell_7_3 > nobr').text
+    debtr2019 = drive.find_element_by_css_selector('#grid5_cell_11_3 > nobr').text
     debt_ratio2019.append(debtr2019)
-    debtr2018 = drive.find_element_by_css_selector('#grid5_cell_7_2 > nobr').text
+    debtr2018 = drive.find_element_by_css_selector('#grid5_cell_11_2 > nobr').text
     debt_ratio2018.append(debtr2018)
-    debtr2017 = drive.find_element_by_css_selector('#grid5_cell_7_1 > nobr').text
+    debtr2017 = drive.find_element_by_css_selector('#grid5_cell_11_1 > nobr').text
     debt_ratio2017.append(debtr2017)
     # PER
-    per2020 = drive.find_element_by_css_selector('#grid5_cell_7_4 > nobr').text
+    per2020 = drive.find_element_by_css_selector('#grid7_cell_3_3 > nobr').text
     per_2020.append(per2020)
-    per2019 = drive.find_element_by_css_selector('#grid5_cell_7_3 > nobr').text
+    per2019 = drive.find_element_by_css_selector('#grid7_cell_3_2 > nobr').text
     per_2019.append(per2019)
-    per2018 = drive.find_element_by_css_selector('#grid5_cell_7_2 > nobr').text
+    per2018 = drive.find_element_by_css_selector('#grid7_cell_3_1 > nobr').text
     per_2018.append(per2018)
-    per2017 = drive.find_element_by_css_selector('#grid5_cell_7_1 > nobr').text
-    per_2017.append(per2017) 
     # PBR
-    pbr2020 = drive.find_element_by_css_selector('#grid5_cell_7_4 > nobr').text
+    pbr2020 = drive.find_element_by_css_selector('#grid7_cell_6_3 > nobr').text
     pbr_2020.append(pbr2020)
-    pbr2019 = drive.find_element_by_css_selector('#grid5_cell_7_3 > nobr').text
+    pbr2019 = drive.find_element_by_css_selector('#grid7_cell_6_2 > nobr').text
     pbr_2019.append(pbr2019)
-    pbr2018 = drive.find_element_by_css_selector('#grid5_cell_7_2 > nobr').text
+    pbr2018 = drive.find_element_by_css_selector('#grid7_cell_6_1 > nobr').text
     pbr_2018.append(pbr2018)
-    pbr2017 = drive.find_element_by_css_selector('#grid5_cell_7_1 > nobr').text
-    pbr_2017.append(pbr2017) 
 
-stock_info = {
+
+stock_info1 = {
     'stock_name' : name_li,
     'sales_volume(2020)' : sales_vol2020,
     'sales_volume(2019)' : sales_vol2019,
@@ -193,18 +181,25 @@ stock_info = {
     'debt_ratio(2020)' : debt_ratio2020,
     'debt_ratio(2019)' : debt_ratio2019,
     'debt_ratio(2018)' : debt_ratio2018,
-    'debt_ratio(2017)' : debt_ratio2017,
+    'debt_ratio(2017)' : debt_ratio2017
+}
+stock_info2 = {
+    'stock_name' : name_li,
     'PER(2020)' : per_2020,
     'PER(2019)' : per_2019,
     'PER(2018)' : per_2018,
-    'PER(2017)' : per_2017,
     'PBR(2020)' : pbr_2020,
     'PBR(2019)' : pbr_2019,
     'PBR(2018)' : pbr_2018,
-    'PBR(2017)' : pbr_2017
 }
 
-df = DataFrame(stock_info)
-df.to_csv("stock_information.csv",encoding="cp949")
+
+df1 = DataFrame(stock_info1)
+df1.set_index('stock_name')
+df2 = DataFrame(stock_info2)
+df2.set_index('stock_name')
+df3 = pd.merge(df1,df2,how='left')
+df3.to_csv("stock_information.csv",encoding="cp949")
+print(df)
 
 
